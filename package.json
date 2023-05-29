@@ -1,0 +1,27 @@
+{
+  "name": "docsify-asciidoc",
+  "version": "1.0.0",
+  "description": "AsciiDoc support for Docsify",
+  "main": "dist/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gchiesa/docsify-asciidoc.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "docsify",
+    "asciidoc"
+  ],
+  "author": "Giuseppe Chiesa",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "babel-loader": "^9.1.2",
+    "downdoc": "^1.0.1-stable",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  }
+}
