@@ -1,0 +1,64 @@
+= Docsify AsciiDoc plugin
+
+With docsify-asciidoc you can render AsciiDoc pages in Docsify.
+
+This plugin leverage is a simple Docsify plugin based on the great work done in other projects:
+
+* https://docs.asciidoctor.org/asciidoctor.js/latest/[Asciidoctor.js]
+* https://github.com/mixmark-io/turndown[Turndown]
+* https://github.com/opendevise/downdoc[Downdoc]
+
+You can choose the embedded Downdoc rendered (very small footprint) or use Asciidoctor as processor.
+
+== How to use it
+
+Ensure you disable the default `.md` extension in Docsify:
+
+[source,javascript]
+----
+    window.$docsify = {
+        ext: ''
+    }
+
+----
+
+=== With Asciidoctor
+
+For a more complete feature set you can use Asciidoctor.js, and you need to import 2 libraries in your docsify
+`index.html`:
+
+[source,html]
+----
+<!-- Asciidoctor -->
+<script src="https://cdn.jsdelivr.net/npm/@asciidoctor/core@2.2.6/dist/browser/asciidoctor.min.js"></script>
+<!-- docsify-asciidoc -->
+<script src="unpkg.com/docsify-asciidoc@^1/dist/main.js"></script>
+
+----
+
+then you need to enable asciidoctor i your Docsify configuration:
+
+[source,javascript]
+----
+    window.$docsify = {
+      asciidocToMarkdown : {
+        asciidoctorEnabled: true,
+      }
+    }
+
+----
+
+=== With embedded processor
+
+Include the following snippet in your Docsify `index.html`:
+
+[source,html]
+----
+<!-- docsify-asciidoc -->
+<script src="unpkg.com/docsify-asciidoc@^1/dist/main.js"></script>
+----
+
+== Example
+
+Check the link:example/index.html[`example/index.html`] for a complete configuration example.
+

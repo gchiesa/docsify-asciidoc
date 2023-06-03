@@ -1,6 +1,6 @@
 {
   "name": "docsify-asciidoc",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "AsciiDoc support for Docsify",
   "main": "dist/main.js",
   "repository": {
@@ -23,5 +23,8 @@
     "downdoc": "^1.0.1-stable",
     "webpack": "^5.84.1",
     "webpack-cli": "^5.1.1"
+  },
+  "dependencies": {
+    "turndown": "^7.1.2"
   }
 }
