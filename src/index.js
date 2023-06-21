@@ -3,6 +3,12 @@
 
 const downdoc = require('downdoc')
 const turndown = require('turndown')
+const turndownPluginGfm = require('turndown-plugin-gfm')
+
+const gfm = turndownPluginGfm.gfm
+const tables = turndownPluginGfm.tables
+const strikethrough = turndownPluginGfm.strikethrough
+const taskListItems = turndownPluginGfm.taskListItems
 
 import TurndownService from "turndown"
 
@@ -13,6 +19,25 @@ const docsifyAsciidocOptions = {
     downdocAttributes: undefined,
     ext: '.adoc',
     debug: false,
+    turndownKeep: ["table", "tr", "td"],
+    turndownPluginGfmCapabilities: ["strikethrough", "tables", "taskListItems"],
+    debugDumpIntermediateHTML: false
+}
+
+function setTurndownPlugins(turndownInstance, pluginList) {
+    if (pluginList.includes("strikethrough")) {
+        turndownInstance().use(strikethrough)
+    }
+    if (pluginList.includes("tables")) {
+        turndownInstance().use(tables)
+    }
+    if (pluginList.includes("taskListItems")) {
+        turndownInstance().use(taskListItems)
+    }
+    if (pluginList.includes("gfm")) {
+        turndownInstance().use(gfm)
+    }
+    return turndownInstance
 }
 
 // main function
@@ -32,7 +57,14 @@ function docsifyAsciidoc(hook, vm) {
                 debug("using asciidoctor instance")
                 data = asciidoctor.convert(content)
                 debug("instantiating turndown")
-                markdown = TurndownService().turndown(data)
+                let tds = TurndownService
+                if (docsifyAsciidocOptions.turndownPluginGfmCapabilities.length) {
+                    debug("using turndown-plugin-gfm capabilities: " + docsifyAsciidocOptions.turndownPluginGfmCapabilities)
+                    tds = setTurndownPlugins(tds, docsifyAsciidocOptions.turndownPluginGfmCapabilities)
+                }
+                if(docsifyAsciidocOptions.debugDumpIntermediateHTML)
+                    debug("html data: " + data)
+                markdown = tds().keep(docsifyAsciidocOptions.turndownKeep).turndown(data)
             } else {
                 debug("using embedded converted")
                 markdown = downdoc(content, docsifyAsciidocOptions.downdocAttributes)
