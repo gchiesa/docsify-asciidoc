@@ -19,9 +19,11 @@ const docsifyAsciidocOptions = {
     downdocAttributes: undefined,
     ext: '.adoc',
     debug: false,
+    turndownOptions: {codeBlockStyle: "fenced"},
     turndownKeep: ["table", "tr", "td"],
     turndownPluginGfmCapabilities: ["strikethrough", "tables", "taskListItems"],
-    debugDumpIntermediateHTML: false
+    debugDumpIntermediateHTML: false,
+    debugDumpGeneratedMarkdown: false
 }
 
 function setTurndownPlugins(turndownInstance, pluginList) {
@@ -62,9 +64,9 @@ function docsifyAsciidoc(hook, vm) {
                     debug("using turndown-plugin-gfm capabilities: " + docsifyAsciidocOptions.turndownPluginGfmCapabilities)
                     tds = setTurndownPlugins(tds, docsifyAsciidocOptions.turndownPluginGfmCapabilities)
                 }
-                if(docsifyAsciidocOptions.debugDumpIntermediateHTML)
+                if (docsifyAsciidocOptions.debugDumpIntermediateHTML)
                     debug("html data: " + data)
-                markdown = tds().keep(docsifyAsciidocOptions.turndownKeep).turndown(data)
+                markdown = tds(docsifyAsciidocOptions.turndownOptions).keep(docsifyAsciidocOptions.turndownKeep).turndown(data)
             } else {
                 debug("using embedded converted")
                 markdown = downdoc(content, docsifyAsciidocOptions.downdocAttributes)
@@ -72,6 +74,8 @@ function docsifyAsciidoc(hook, vm) {
         } catch (err) {
             console.error(err);
         }
+        if (docsifyAsciidocOptions.debugDumpGeneratedMarkdown)
+            debug("generated markdown: " + markdown)
         return next(markdown)
     });
 }
