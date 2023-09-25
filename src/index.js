@@ -42,6 +42,18 @@ function setTurndownPlugins(turndownInstance, pluginList) {
     return turndownInstance
 }
 
+function registerAsciidoctorKroki(asciidoctor) {
+    try {
+        const registry = asciidoctor.Extensions.create()
+        AsciidoctorKroki.register(registry)
+        debug("registered asciidoctor-kroki extension")
+        return registry
+    } catch (err) {
+        debug("asciidoctor-kroki extension not found")
+    }
+    return undefined
+}
+
 // main function
 function docsifyAsciidoc(hook, vm) {
     hook.beforeEach(function (content, next) {
@@ -56,8 +68,10 @@ function docsifyAsciidoc(hook, vm) {
             debug("converting asciidoc to markdown")
             if (docsifyAsciidocOptions.asciidoctorEnabled) {
                 let asciidoctor = (docsifyAsciidocOptions.asciidoctorProcessor !== undefined) ? docsifyAsciidocOptions.asciidoctorProcessor : Asciidoctor()
+                let registry = registerAsciidoctorKroki(asciidoctor)
+
                 debug("using asciidoctor instance")
-                data = asciidoctor.convert(content)
+                data = asciidoctor.convert(content, {safe: 'safe', extension_registry: registry})
                 debug("instantiating turndown")
                 let tds = TurndownService
                 if (docsifyAsciidocOptions.turndownPluginGfmCapabilities.length) {
